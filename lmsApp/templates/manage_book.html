@@ -11,10 +11,6 @@
     <form action="" id="book-form">
         <input type="hidden" name="id" value="{{book.id}}">
         <div class="mb-3">
-            <label for="id" class="control-label">ID Book</label>
-            <input type="text" id="id" name="id" class="form-control form-control-sm rounded-0" value="{{book.id}}" required>
-        </div>
-        <div class="mb-3">
             <label for="category" class="control-label">Category</label>
             <select type="text" id="category" name="category" class="form-select form-select-sm rounded-0" required>
                 
@@ -41,15 +37,7 @@
         </div>
         <div class="mb-3">
             <label for="publisher" class="control-label">Publisher</label>
-            <select type="text" id="publisher" name="publisher" class="form-select form-select-sm rounded-0" required>
-                {% for category in categories %}
-                {% if  book.category.id == category.id %}
-                    <option value="{{category.id}}" selected>{{category}}</option>
-                {% else %}
-                    <option value="{{category.id}}">{{category}}</option>
-                {% endif %}
-                {% endfor %}
-            </select>    
+            <input type="text" id="publisher" name="publisher" class="form-control form-control-sm rounded-0" value="{{book.publisher}}" required>   
         </div>
         <div class="mb-3">
             <label for="date_published" class="control-label">Date Published</label>

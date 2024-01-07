@@ -8,6 +8,19 @@ from lmsApp import models, forms
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from .models import Post  # New
+from django.http import JsonResponse
+from django.views import View
+
+def product_search(request):
+    return render(request, 'index.html')
+
+class ProductAutocomplete(View):
+    def get(self, request):
+        query = request.GET.get('term', '')
+        books = models.Books.objects.filter(name__icontains=query)[:10]
+        results = [book.title for book in books]
+        return JsonResponse(results, safe=False)
 
 def context_data(request):
     fullpath = request.get_full_path()
@@ -386,10 +399,14 @@ def save_book(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
+        print(post)
+        print(post['id'])
         if not post['id'] == '':
+            print(1)
             book = models.Books.objects.get(id = post['id'])
-            form = forms.SaveBook(request.POST, instance=book)
+            form = forms.SaveBook(request.POST,instance = book)
         else:
+            print(2)
             form = forms.SaveBook(request.POST) 
 
         if form.is_valid():
