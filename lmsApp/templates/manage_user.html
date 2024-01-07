@@ -1,0 +1,140 @@
+{% load static %}
+<div class="container-fluid">
+    <form action="" id="customuser-form">
+        <input type="hidden" name="id" value="{{customuser.id}}">
+        <input type="hidden" name="manage_user" value="1">
+        <div class="form-group mb-3">
+            <label for="id" class="control-label">ID</label>
+            <input type="text" class="form-control rounded-0" name="id" id="id" value="{% if form.data.id %}{{ form.data.id }}{% else %}{{ customuser.id }}{% endif %}" required="required">
+        </div>
+        <div class="form-group mb-3">
+            <label for="first_name" class="control-label">First Name</label>
+            <input type="text" class="form-control rounded-0" name="first_name" id="first_name" value="{% if form.data.first_name %}{{ form.data.first_name }}{% else %}{{ customuser.first_name }}{% endif %}" required="required">
+        </div>
+        <div class="form-group mb-3">
+            <label for="middle_name" class="control-label">Middle Name</label>
+            <input type="text" class="form-control rounded-0" name="middle_name" id="middel_name" value="{% if form.data.middle_name %}{{ form.data.middle_name }}{% else %}{{ customuser.middle_name }}{% endif %}" >
+        </div>
+        <div class="form-group mb-3">
+            <label for="last_name" class="control-label">Last Name</label>
+            <input type="text" class="form-control rounded-0" name="last_name" id="last_name" value="{% if form.data.last_name %}{{ form.data.last_name }}{% else %}{{ customuser.last_name }}{% endif %}" required="required">
+        </div>
+        <div class="form-group mb-3">
+            <label for="username" class="control-label">Username</label>
+            <input type="text" class="form-control rounded-0" name="username" id="username" value="{% if form.data.username %}{{ form.data.username }}{% else %}{{ customuser.username }}{% endif %}" required="required">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-sm-12">
+            <div class="mb-3">
+                <label for="gender" class="control-label">Gender</label>
+                <select type="text" id="gender" name="gender" class="form-select form-select-sm rounded-0" required>
+                    {% if  customuser.gender == 'Nam' %}
+                        <option selected>Nữ</option>
+                    {% else %}
+                        <option>Nam</option>
+                    {% endif %}
+                    {% if  customuser.gender == 'Nữ' %}
+                        <option selected>Nữ</option>
+                    {% else %}
+                        <option>Nữ</option>
+                     {% endif %}
+                    {% if  customuser.gender == 'Khác' %}
+                        <option selected>Khác</option>
+                    {% else %}
+                        <option>Khác</option>
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="birth_date" class="control-label">Birthday</label>
+            <input type="date" class="form-control rounded-0" name="birth_date" id="birth_date" value="{% if form.data.birth_date %}{{ form.data.birth_date }}{% else %}{{ customuser.birth_date }}{% endif %}" >
+        </div>
+        <div class="form-group mb-3">
+            <label for="email" class="control-label">Email</label>
+            <input type="text" class="form-control rounded-0" name="email" id="email" value="{% if form.data.email %}{{ form.data.email }}{% else %}{{ customuser.email }}{% endif %}" required="required">
+        </div>
+        <div class="form-group mb-3">
+            <label for="contact" class="control-label">Contact</label>
+            <input type="text" class="form-control rounded-0" name="contact" id="contact" value="{% if form.data.contact %}{{ form.data.contact }}{% else %}{{ customuser.contact }}{% endif %}" >
+        </div>
+        <div class="form-group mb-3">
+            <label for="address" class="control-label">Address</label>
+            <input type="textarea" class="form-control rounded-0" name="address" id="address" value="{% if form.data.address %}{{ form.data.address}}{% else %}{{ customuser.address }}{% endif %}" >
+        </div>
+        <div class="mb-3">
+            <label for="status" class="control-label">Status</label>
+            <select type="text" id="status" name="status" class="form-select form-select-sm rounded-0" required>
+                {% if customuser.is_active == '0' %}
+                <option value="0" selected>Active</option>
+                {% else %}
+                <option value="0">Active</option>
+                {% endif %}
+                {% if customuser.is_active == '1' %}
+                <option value="1" selected>Inactive</option>
+                {% else %}
+                <option value="1">Inactive</option>
+                {% endif %}
+            </select>
+        </div>
+        {% if not customuser.id %}
+        <div class="form-group mb-3">
+            <label for="password1" class="control-label">Password</label>
+            <input type="password" class="form-control rounded-0" name="password1" id="password1" required="required">
+        </div>
+        <div class="form-group mb-3">
+            <label for="password2" class="control-label">Confirm Password</label>
+            <input type="password" class="form-control rounded-0" name="password2" id="password2" required="required">
+        </div>
+        {% endif %}
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#user-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-user' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        location.reload()
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>
