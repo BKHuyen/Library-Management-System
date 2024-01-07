@@ -11,25 +11,30 @@
                     <div class="text-end mb-3">
                         <button class="btn btn-sm btn-primary rounded-0 bg-gradient-primary" type="button" id="create_new"><i class="fa fa-plus"></i> Add New</button>
                     </div>
+                    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                    <br/>
                     <table class="table table-bordered table-striped" id="book-tbl">
                         <colgroup>
                             <col width="4%">
+                            <col width="4%">
                             <col width="20%">
-                            <col width="10%">
-                            <col width="30%">
                             <col width="20%">
+                            <col width="16%">
                             <col width="10%">
+                            <col width="10%">
+                            <col width="6%">
                             <col width="6%">
                            
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
+                                <th class="text-center">Book ID</th>
                                 <th class="text-center">Date Added</th>
-                                <th class="text-center">ISBN</th>
                                 <th class="text-center">Title</th>
                                 <th class="text-center">Category</th>
-                                
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Author</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                 
@@ -39,15 +44,13 @@
                             {% for book in books %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
-                                <td>{{ book.date_added|date:"Y-m-d h:i A"}}</td>
-                                <td>
-                                    <div class="lh-1">
-                                        <div>{{ book.id}}</div>
-                                        
-                                    </div>
-                                </td>
-                                <td>{{ book.title}}</td>
-                                <td>{{ book.category.name }}</td>
+                                <td class="text-center">{{ book.id }}</td>
+                                <td class="text-center">{{ book.date_added|date:"Y-m-d h:i"}}</td>
+                            
+                                <td class="text-center">{{ book.title}}</td>
+                                <td class="text-center">{{ book.category.name }}</td>
+                                <td class="text-center">{{ book.quantity}}</td>
+                                <td class="text-center">{{ book.author}}</td>
                                 <td class="text-center">
                                     {% if book.status == '1' %}
                                     <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}
@@ -56,7 +59,6 @@
                                 <td class="text-center">
                                     <div class="dropdown">
                                         <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{book.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
-                                     
                                             Action
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="abtn{{book.pk}}">
@@ -77,6 +79,14 @@
 </section>
 {% endblock pageContent %} {% block ScriptBlock %}
 <script>
+    $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
     $(function() {
         $('#create_new').click(function() {
             uni_modal("<i class='fa fa-plus'></i> Add New Book", "{% url 'manage-book' %}", "modal-lg")

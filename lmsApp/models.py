@@ -25,18 +25,6 @@ class Category(models.Model):
 
     def __str__(self):
         return str(f"{self.name}")
-
-class Publishers(models.Model):
-    name = models.CharField(max_length=250)
-    status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
-    delete_flag = models.IntegerField(default = 0)
-    date_added = models.DateTimeField(default = timezone.now)
-    
-    class Meta:
-        verbose_name_plural = "List of Categories"
-
-    def __str__(self):
-        return str(f"{self.name}")
     
 class CustomUser(AbstractUser):
     middle_name = models.CharField(max_length=150, blank=True, null= True)
@@ -70,7 +58,8 @@ class Books(models.Model):
     category = models.ForeignKey(Category, on_delete= models.CASCADE, related_name="category_id_fk")
     title = models.CharField(max_length=250)
     description = models.TextField(blank=True, null= True)
-    publisher = models.ForeignKey(Publishers, on_delete= models.CASCADE, related_name="publisher_id_fk")
+    author = models.TextField(blank=True, null= True)
+    publisher = models.TextField(blank=True, null= True)
     date_published = models.DateTimeField()
     quantity = models.IntegerField(default = 0)
     status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
@@ -130,3 +119,10 @@ class Borrow_detail(models.Model):
     def __str__(self):
         return str(f"{self.book.id}")
 
+class Post(models.Model):
+    title = models.CharField(max_length=80)
+    content = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.title

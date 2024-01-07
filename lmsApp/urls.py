@@ -54,4 +54,6 @@ urlpatterns = [
     path('view_borrow/<int:pk>',views.view_borrow,name='view-borrow-pk'),
     path('save_borrow',views.save_borrow,name='save-borrow'),
     path('delete_borrow/<int:pk>',views.delete_borrow,name='delete-borrow'),
+    path('', views.product_search, name='product-search'),
+    path('autocomplete/', views.ProductAutocomplete.as_view(), name='product-autocomplete'),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -158,7 +158,6 @@ class SaveSubCategory(forms.ModelForm):
         raise forms.ValidationError("Sub-Category Name already exists on the selected Category.")
 """
 class SaveBook(forms.ModelForm):
-    id = forms.IntegerField()
     category = forms.CharField(max_length=250)
     title = forms.CharField(max_length=250)
     description = forms.Textarea()
@@ -166,11 +165,11 @@ class SaveBook(forms.ModelForm):
     date_published = forms.DateField()
     quantity = forms.IntegerField()
     status = forms.CharField(max_length=2)  
-    
+    author = forms.Textarea()
     
     class Meta:
         model = models.Books
-        fields = ('id', 'category', 'title', 'description', 'publisher', 'date_published', 'quantity', 'status', )
+        fields = ( 'category', 'title', 'description', 'publisher', 'date_published', 'quantity', 'status','author' )
 
     def clean_category(self):
         scid = int(self.data['category']) if (self.data['category']).isnumeric() else 0
