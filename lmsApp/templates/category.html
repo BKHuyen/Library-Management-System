@@ -106,6 +106,7 @@
         })
         $('#category-tbl').find('td, th').addClass('px-2 py-1 align-middle')
         $('#category-tbl').DataTable({
+            bFilter: false, bInfo: false,
             columnDefs: [{
                 orderable: false,
                 targets: [5]

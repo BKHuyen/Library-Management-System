@@ -94,6 +94,7 @@
         })
         $('#borrow-tbl').find('td, th').addClass('px-2 py-1 align-middle')
         $('#borrow-tbl').DataTable({
+            bFilter: false, bInfo: false,
             columnDefs: [{
                 orderable: false,
                 targets: [4]
