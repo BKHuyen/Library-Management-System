@@ -36,10 +36,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for member in members %}
+                            {% for custom in members %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
-                                <td>{{ member.date_added|date:"Y-m-d h:i A"}}</td>
+                                <td>{{ member.date_added|date:"Y-m-d h:i"}}</td>
                                 <td>{{ member.id}}</td>
                                 <td>{{ member.name }}</td>
                                 

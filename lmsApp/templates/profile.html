@@ -12,13 +12,19 @@
                             <div class="col-md-8">
                                 <dl>
                                     <dt class="text-muted">Fullname</dt>
-                                    <dd class="ps-4">{{ user.first_name }} {{ user.last_name }}</dd>
-                                    <dt class="text-muted">Email</dt>
-                                    <dd class="ps-4">{{ user.email }}</dd>
+                                    <dd class="ps-4">{{ user.first_name }} {{user.middle_name}} {{ user.last_name }}</dd>
                                     <dt class="text-muted">Username</dt>
                                     <dd class="ps-4">{{ user.username }}</dd>
+                                    <dt class="text-muted">Gender</dt>
+                                    <dd class="ps-4">{{ user.gender }}</dd>
+                                    <dt class="text-muted">Birthday</dt>
+                                    <dd class="ps-4">{{ user.birth_date }}</dd>
+                                    <dt class="text-muted">Email</dt>
+                                    <dd class="ps-4">{{ user.email }}</dd>
                                     <dt class="text-muted">Contact</dt>
                                     <dd class="ps-4">{{ user.contact }}</dd>
+                                    <dt class="text-muted">Address</dt>
+                                    <dd class="ps-4">{{ user.address }}</dd>
                                 </dl>
                             </div>
                         </div>

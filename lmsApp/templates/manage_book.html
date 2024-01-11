@@ -29,7 +29,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="control-label">Description</label>
-            <textarea rows="3" id="description" name="description" class="form-control form-control-sm rounded-0" required>{{book.description}}</textarea>
+            <textarea rows="3" id="description" name="description" class="form-control form-control-sm rounded-0" >{{book.description}}</textarea>
         </div>
         <div class="mb-3">
             <label for="author" class="control-label">Author</label>
@@ -39,13 +39,14 @@
             <label for="publisher" class="control-label">Publisher</label>
             <input type="text" id="publisher" name="publisher" class="form-control form-control-sm rounded-0" value="{{book.publisher}}" required>   
         </div>
+        
         <div class="mb-3">
             <label for="date_published" class="control-label">Date Published</label>
-            <input type="date" id="date_published" name="date_published" class="form-control form-control-sm rounded-0" value="{{book.date_published|date:'Y-m-d'}}" required>
+            <input type="text" id="date_published" name="date_published" class="form-control form-control-sm rounded-0" value="{{book.date_published}}" required>
         </div>
         <div class="mb-3">
             <label for="quantity" class="control-label">Quantity</label>
-            <input type="text" id="quantity" name="quantity" class="form-control form-control-sm rounded-0" value="{{book.quantity}}" required>
+            <input type="number" min="1" id="quantity" name="quantity" class="form-control form-control-sm rounded-0" value="{{book.quantity}}" required>
         </div>
         
         <div class="mb-3">

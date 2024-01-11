@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block pageContent %}
 <section class="py-4">
     <div class="container">
-        <h3 class="fw-bolder text-center">List of Members</h3>
+        <h3 class="fw-bolder text-center">List of Users</h3>
         <center>
             <hr class="bg-primary opacity-100" style="height:5px" width="50%">
         </center>
@@ -17,14 +17,16 @@
                             <col width="20%">
                             <col width="15%">  
                             <col width="5%">                          
-                            <col width="12%">
+                            <col width="10%">
                             <col width="25%">
-                            <col width="20%">
+                            <col width="15%">
+                            <col width="10%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center">STT</th>
-                                <th class="text-center">Name</th>
+                                <th class="text-center">Full Name</th>
                                 <th class="text-center">Username</th>
                                 <th class="text-center">Gender</th>
                                 <th class="text-center">Birthday</th>
@@ -38,14 +40,14 @@
                             {% for user in users %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
-                                <td>{{ user.first_name}} {{ user.middel_name}} {{ user.last_name}}</td>
-                                <td>{{ user.username}}</td>
-                                <td>{{ user.gender}}</td>
-                                <td>{{ user.birth_date}}</td>
-                                <td>{{ user.email}}</td>
-                                <td>{{ user.contact}}</td>
+                                <td>{{ user.first_name}} {{ user.middle_name}} {{ user.last_name}}</td>
+                                <td class="text-center">{{ user.username}}</td>
+                                <td class="text-center">{{ user.gender}}</td>
+                                <td class="text-center">{{ user.birth_date|date:"d-m-Y"}}</td>
+                                <td class="text-center">{{ user.email}}</td>
+                                <td class="text-center">{{ user.contact}}</td>
                                 <td class="text-center">
-                                    {% if user.is_active == '1' %}
+                                    {% if user.is_active == 1 %}
                                     <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}
                                     <span class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span> {% endif %}
                                 </td>
@@ -74,13 +76,13 @@
 <script>
     $(function() {
         $('#create_new').click(function() {
-            uni_modal("<i class='fa fa-plus'></i> Add New Member", "{% url 'manage-user' %}")
+            uni_modal("<i class='fa fa-plus'></i> Add New User", "{% url 'manage-user' %}")
         })
         $('.edit-data').click(function() {
-            uni_modal("<i class='fa fa-edit'></i> Edit Member Details", $(this).attr('data-url'))
+            uni_modal("<i class='fa fa-edit'></i> Edit User Details", $(this).attr('data-url'))
         })
         $('.view-data').click(function() {
-            uni_modal("<i class='fa fa-th-list'></i> Member Details", $(this).attr('data-url'))
+            uni_modal("<i class='fa fa-th-list'></i> User Details", $(this).attr('data-url'))
         })
         $('.view_image').click(function() {
             var img = $(this).attr('data-img-url')

@@ -60,7 +60,7 @@ class Books(models.Model):
     description = models.TextField(blank=True, null= True)
     author = models.TextField(blank=True, null= True)
     publisher = models.TextField(blank=True, null= True)
-    date_published = models.DateTimeField()
+    date_published = models.CharField(max_length=20)
     quantity = models.IntegerField(default = 0)
     status = models.CharField(max_length=2, choices=(('1','Active'), ('2','Inactive')), default = 1)
     delete_flag = models.IntegerField(default = 0)
@@ -70,7 +70,7 @@ class Books(models.Model):
         verbose_name_plural = "List of Books"
 
     def __str__(self):
-        return str(f"{self.ID} - {self.title}")
+        return str(f"{self.id} - {self.title}")
 
 """
 class Member(models.Model):
@@ -98,26 +98,21 @@ class Member(models.Model):
     def name(self):
         return str(f"{self.first_name}{' '+self.middle_name if not self.middle_name == '' else ''} {self.last_name}")
 """
+
+
 class Borrow(models.Model):
-    member = models.ForeignKey(CustomUser, on_delete= models.CASCADE, related_name="user_id_fk")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="user_id_fk")
+    book = models.ForeignKey(Books, on_delete=models.CASCADE, related_name="book_id_fk")
     borrowing_date = models.DateField()
-    status = models.CharField(max_length=2, choices=(('1','Pending'), ('2','Returned')), default = 1)
-    quantity = models.IntegerField(default = 0)
-    class Meta:
-        verbose_name_plural = "Borrowing Transactions"
-
-    def __str__(self):
-        return str(f"{self.member.id}")
-    
-class Borrow_detail(models.Model):
-    book = models.ForeignKey(Books, on_delete= models.CASCADE, related_name="book_id_fk")
-    borrow = models.ForeignKey(Borrow, on_delete= models.CASCADE, related_name="borrow_id_fk")
     return_date = models.DateField()
+    quantity = models.IntegerField(default=0)
+    status = models.CharField(max_length=2, choices=(('1', 'Pending'), ('2', 'Returned')), default=1)
+    date_added = models.DateTimeField(default = timezone.now)
     class Meta:
         verbose_name_plural = "Borrowing Transactions"
 
     def __str__(self):
-        return str(f"{self.book.id}")
+        return f"{self.user.id} - {self.book.id}"
 
 class Post(models.Model):
     title = models.CharField(max_length=80)
@@ -126,3 +121,4 @@ class Post(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title
+

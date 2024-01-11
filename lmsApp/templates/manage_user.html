@@ -1,43 +1,40 @@
 {% load static %}
 <div class="container-fluid">
-    <form action="" id="customuser-form">
-        <input type="hidden" name="id" value="{{customuser.id}}">
+    <form action="" id="user-form">
+        <input type="hidden" name="id" value="{{user.id}}">
         <input type="hidden" name="manage_user" value="1">
-        <div class="form-group mb-3">
-            <label for="id" class="control-label">ID</label>
-            <input type="text" class="form-control rounded-0" name="id" id="id" value="{% if form.data.id %}{{ form.data.id }}{% else %}{{ customuser.id }}{% endif %}" required="required">
-        </div>
+        
         <div class="form-group mb-3">
             <label for="first_name" class="control-label">First Name</label>
-            <input type="text" class="form-control rounded-0" name="first_name" id="first_name" value="{% if form.data.first_name %}{{ form.data.first_name }}{% else %}{{ customuser.first_name }}{% endif %}" required="required">
+            <input type="text" class="form-control rounded-0" name="first_name" id="first_name" value="{% if form.data.first_name %}{{ form.data.first_name }}{% else %}{{ user.first_name }}{% endif %}" required="required">
         </div>
         <div class="form-group mb-3">
             <label for="middle_name" class="control-label">Middle Name</label>
-            <input type="text" class="form-control rounded-0" name="middle_name" id="middel_name" value="{% if form.data.middle_name %}{{ form.data.middle_name }}{% else %}{{ customuser.middle_name }}{% endif %}" >
+            <input type="text" class="form-control rounded-0" name="middle_name" id="middel_name" value="{% if form.data.middle_name %}{{ form.data.middle_name }}{% else %}{{ user.middle_name }}{% endif %}" >
         </div>
         <div class="form-group mb-3">
             <label for="last_name" class="control-label">Last Name</label>
-            <input type="text" class="form-control rounded-0" name="last_name" id="last_name" value="{% if form.data.last_name %}{{ form.data.last_name }}{% else %}{{ customuser.last_name }}{% endif %}" required="required">
+            <input type="text" class="form-control rounded-0" name="last_name" id="last_name" value="{% if form.data.last_name %}{{ form.data.last_name }}{% else %}{{ user.last_name }}{% endif %}" required="required">
         </div>
         <div class="form-group mb-3">
             <label for="username" class="control-label">Username</label>
-            <input type="text" class="form-control rounded-0" name="username" id="username" value="{% if form.data.username %}{{ form.data.username }}{% else %}{{ customuser.username }}{% endif %}" required="required">
+            <input type="text" class="form-control rounded-0" name="username" id="username" value="{% if form.data.username %}{{ form.data.username }}{% else %}{{ user.username }}{% endif %}" required="required">
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-sm-12">
             <div class="mb-3">
                 <label for="gender" class="control-label">Gender</label>
                 <select type="text" id="gender" name="gender" class="form-select form-select-sm rounded-0" required>
-                    {% if  customuser.gender == 'Nam' %}
-                        <option selected>Nữ</option>
+                    {% if  user.gender == 'Nam' %}
+                        <option selected>Nam</option>
                     {% else %}
                         <option>Nam</option>
                     {% endif %}
-                    {% if  customuser.gender == 'Nữ' %}
+                    {% if  user.gender == 'Nữ' %}
                         <option selected>Nữ</option>
                     {% else %}
                         <option>Nữ</option>
                      {% endif %}
-                    {% if  customuser.gender == 'Khác' %}
+                    {% if  user.gender == 'Khác' %}
                         <option selected>Khác</option>
                     {% else %}
                         <option>Khác</option>
@@ -47,44 +44,43 @@
         </div>
         <div class="form-group mb-3">
             <label for="birth_date" class="control-label">Birthday</label>
-            <input type="date" class="form-control rounded-0" name="birth_date" id="birth_date" value="{% if form.data.birth_date %}{{ form.data.birth_date }}{% else %}{{ customuser.birth_date }}{% endif %}" >
+            <input type="date" class="form-control rounded-0" name="birth_date" id="birth_date" value="{% if form.data.birth_date|date:'d-m-Y' %}{{ form.data.birth_date|date:'d-m-Y' }}{% else %}{{ user.birth_date|date:'d-m-Y' }}{% endif %}" >
         </div>
         <div class="form-group mb-3">
             <label for="email" class="control-label">Email</label>
-            <input type="text" class="form-control rounded-0" name="email" id="email" value="{% if form.data.email %}{{ form.data.email }}{% else %}{{ customuser.email }}{% endif %}" required="required">
+            <input type="text" class="form-control rounded-0" name="email" id="email" value="{% if form.data.email %}{{ form.data.email }}{% else %}{{ user.email }}{% endif %}" required="required">
         </div>
         <div class="form-group mb-3">
             <label for="contact" class="control-label">Contact</label>
-            <input type="text" class="form-control rounded-0" name="contact" id="contact" value="{% if form.data.contact %}{{ form.data.contact }}{% else %}{{ customuser.contact }}{% endif %}" >
+            <input type="text" class="form-control rounded-0" name="contact" id="contact" value="{% if form.data.contact %}{{ form.data.contact }}{% else %}{{ user.contact }}{% endif %}" >
         </div>
+        
         <div class="form-group mb-3">
             <label for="address" class="control-label">Address</label>
-            <input type="textarea" class="form-control rounded-0" name="address" id="address" value="{% if form.data.address %}{{ form.data.address}}{% else %}{{ customuser.address }}{% endif %}" >
+            <textarea class="form-control rounded-0" name="address" id="address">{% if form.data.address %}{{ form.data.address }}{% else %}{{ user.address }}{% endif %}</textarea>
         </div>
+        
         <div class="mb-3">
-            <label for="status" class="control-label">Status</label>
-            <select type="text" id="status" name="status" class="form-select form-select-sm rounded-0" required>
-                {% if customuser.is_active == '0' %}
-                <option value="0" selected>Active</option>
+            <label for="is_active" class="control-label">Status</label>
+            <select type="text" id="is_active" name="is_active" class="form-select form-select-sm rounded-0" required>
+                {% if user.is_active == 1 %}
+                <option value=1 selected>Active</option>
                 {% else %}
-                <option value="0">Active</option>
+                <option value=1>Active</option>
                 {% endif %}
-                {% if customuser.is_active == '1' %}
-                <option value="1" selected>Inactive</option>
+                {% if user.is_active == 0 %}
+                <option value=0 selected>Inactive</option>
                 {% else %}
-                <option value="1">Inactive</option>
+                <option value=0>Inactive</option>
                 {% endif %}
             </select>
         </div>
-        {% if not customuser.id %}
+        {% if not user.id %}
         <div class="form-group mb-3">
             <label for="password1" class="control-label">Password</label>
             <input type="password" class="form-control rounded-0" name="password1" id="password1" required="required">
         </div>
-        <div class="form-group mb-3">
-            <label for="password2" class="control-label">Confirm Password</label>
-            <input type="password" class="form-control rounded-0" name="password2" id="password2" required="required">
-        </div>
+        
         {% endif %}
     </form>
 </div>

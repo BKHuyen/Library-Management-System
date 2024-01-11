@@ -8,27 +8,21 @@
         <div class="card rounded-0 shadow">
             <div class="card-body">
                 <div class="container-fluid">
-                    <div class="text-end mb-3">
-                        <button class="btn btn-sm btn-primary rounded-0 bg-gradient-primary" type="button" id="create_new"><i class="fa fa-plus"></i> Add New</button>
-                    </div>
+                    
                     <table class="table table-bordered table-striped" id="borrow-tbl">
                         <colgroup>
                             <col width="3%">
-                            <col width="15%">
-                            <col width="20%">
+                            <col width="25%">
                             <col width="20%">
                             
-                            <col width="15%">
+                            <col width="20%">
                             <col width="10%">
                             <col width="7%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center">STT</th>
-                            
-                                <th class="text-center">Member</th>
                                 <th class="text-center">Book</th>
-                            
                                 <th class="text-center">Borrowing Date</th>
                                 <th class="text-center">Return Date</th>
                                 <th class="text-center">Status</th>
@@ -36,16 +30,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for borrow in borrows %}
+                            {% for borrow in user_borrows %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
                                 
-                                <td>
-                                    <div class="text-center">
-                                        
-                                        <div>{{ borrow.user.first_name}} {{ borrow.user.middle_name}} {{ borrow.user.last_name}}</div>
-                                    </div>
-                                </td>
                                 <td>
                                     <div class="text-center">
                                         
@@ -71,16 +59,9 @@
                                     <span class="badge badge-primary bg-gradient bg-primary px-3 rounded-pill bg-opacity-75 text-sm py-1">Returned</span> {% endif %}
                                 </td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{borrow.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
-                                          Action
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="abtn{{borrow.pk}}">
-                                            <li><a class="dropdown-item view-data" href="javascript:void(0)" data-url="{% url 'view-borrow-pk' borrow.pk %}"><i class="fa fa-eye text-dark"></i> View</a></li>
-                                            <li><a class="dropdown-item edit-data" href="javascript:void(0)" data-url="{% url 'manage-borrow-pk' borrow.pk %}"><i class="fa fa-edit text-primary"></i> Edit</a></li>
-                                            <li><a class="dropdown-item delete-data" href="javascript:void(0)" data-url="{% url 'delete-borrow' borrow.pk %}"><i class="fa fa-trash text-danger"></i> Delete</a></li>
-                                        </ul>
-                                    </div>
+                                    <a class="btn btn-skyblue btn-sm rounded border view-data" href="javascript:void(0)" data-url="{% url 'view-borrow-pk' borrow.pk %}">
+                                        <i class="fa fa-eye text-dark"></i> View
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
