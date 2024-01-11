@@ -1,9 +1,47 @@
 {% extends "base.html" %} {% load humanize %} {% load customfilter %} {% block pageContent %}
+{% load static %} {% load customfilter %}
+<!DOCTYPE html>
+<html lang="en">
 
+
+<style>
+    .home_img_tho{
+        width:600px;
+        height:400px;
+    }
+
+    {% block headerContent %} {% endblock headerContent %}
+</style>
 <!--Section: Content-->
 <section class="">
-    <h2 class="fw-bolder">Welcome, {{request.user.first_name}}&nbsp;{{request.user.last_name}}!</h2>
-    
+    <h2 class="fw-bolder"> Welcome, {{request.user.first_name}}&nbsp;{{request.user.middle_name}}&nbsp;{{request.user.last_name}}!</h2>
+    <body>
+        <div class="grid">
+            <div class="grid_row">
+                <div class="grid_colum-2-4">
+                    <div class="home_img">
+                        <img src="{% static 'assets/default/img/thơ.jpg' %}" alt="" class="home_img_tho">
+                    </div>
+            
+                </div>
+                <div class="grid_colum-2-5">
+                    <h2>
+                    <a href="" class="caption" >
+                        Đọc sách chính là hộ chiếu cho vô số cuộc phiêu lưu. (Mary Pope Osborne)</a></h2><br>
+                    <h3><a href="" class="caption" >
+                        Đề xuất thể loại:</a></h3>
+                        <h4>-Giao trình môn học cơ sở</h4>
+                        <h4>-Truyện</h4>
+                        <h4>-Luận án nghiên cứu</h4>
+                        <h4>-Sách đọc chuyên ngành</h4>
+                        <h4>    ...</h4>
+                 </div>
+                
+            </div>
+        </div>
+        <body>
+
+
 </section>
 </div> {% endblock pageContent %} {% block ScriptBlock %}
 <script>

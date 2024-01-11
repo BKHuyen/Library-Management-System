@@ -230,11 +230,11 @@ sup {
 }
 
 a {
-  color: #0d6efd;
+  color: #081e3f;
   text-decoration: underline;
 }
 a:hover {
-  color: #0a58ca;
+  color: #05075a;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -267,7 +267,7 @@ pre code {
 
 code {
   font-size: 0.875em;
-  color: #d63384;
+  color: #2ceec4;
   word-wrap: break-word;
 }
 a > code {
@@ -304,7 +304,7 @@ table {
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  color: #6c757d;
+  color: #0a045c;
   text-align: left;
 }
 

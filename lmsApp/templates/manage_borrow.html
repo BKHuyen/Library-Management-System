@@ -33,7 +33,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <div class="mb-3">
-                    <label for="student" class="control-label">Member</label>
+                    <label for="student" class="control-label">Student</label>
                     <select type="text" id="student" name="student" class="form-select form-select-sm rounded-0" required>
                         {% if not borrow %}
                         <option value="" selected disabled></option>
@@ -51,7 +51,10 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                
+                <div class="mb-3">
+                    <label for="borrowing_date" class="control-label">Date Borrow</label>
+                    <input type="date" id="borrowing_date" name="borrowing_date" class="form-control form-control-sm rounded-0" value="{% if borrow %}{{borrow.borrowing_date|date:'Y-m-d'}}{% else %}{% now 'Y-m-d' %}{% endif %}" required>
+                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <div class="mb-3">
