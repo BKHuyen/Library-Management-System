@@ -46,10 +46,16 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'book-page' %}">Books</a>
                     </li>
-                    
+                    {% if not request.user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'user_borrow-page' %}">Borrowing Transactions</a>
+                    </li>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
+                    <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'borrow-page' %}">Borrowing Transactions</a>
                     </li>
-                    {% if request.user.is_superuser %}
+                    
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'user-page' %}">Users</a>
                     </li>

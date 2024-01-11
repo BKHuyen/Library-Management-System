@@ -17,6 +17,10 @@
                                         <input type="text" class="form-control rounded-0" name="first_name" id="first_name" value="{% if form.data.first_name %}{{ form.data.first_name }}{% else %}{{ user.first_name }}{% endif %}" required="required">
                                     </div>
                                     <div class="form-group mb-3">
+                                        <label for="middle_name" class="control-label">Middle Name</label>
+                                        <input type="text" class="form-control rounded-0" name="middle_name" id="middle_name" value="{% if form.data.middle_name %}{{ form.data.middle_name }}{% else %}{{ user.middle_name }}{% endif %}">
+                                    </div>
+                                    <div class="form-group mb-3">
                                         <label for="last_name" class="control-label">Last Name</label>
                                         <input type="text" class="form-control rounded-0" name="last_name" id="last_name" value="{% if form.data.last_name %}{{ form.data.last_name }}{% else %}{{ user.last_name }}{% endif %}" required="required">
                                     </div>
@@ -25,30 +29,46 @@
                                         <input type="text" class="form-control rounded-0" name="username" id="username" value="{% if form.data.username %}{{ form.data.username }}{% else %}{{ user.username }}{% endif %}" required="required">
                                     </div>
                                     <div class="form-group mb-3">
+                                        <label for="gender" class="control-label">Gender</label>
+                                        <select type="text" id="gender" name="gender" class="form-select form-select-sm rounded-0" required>
+                                            {% if  user.gender == 'Nam' %}
+                                                <option selected>Nam</option>
+                                            {% else %}
+                                                <option>Nam</option>
+                                            {% endif %}
+                                            {% if  user.gender == 'Nữ' %}
+                                                <option selected>Nữ</option>
+                                            {% else %}
+                                                <option>Nữ</option>
+                                             {% endif %}
+                                            {% if  user.gender == 'Khác' %}
+                                                <option selected>Khác</option>
+                                            {% else %}
+                                                <option>Khác</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="birth_date" class="control-label">Birthday</label>
+                                        <input type="date" class="form-control rounded-0" name="birth_date" id="birth_date" value="{% if form.data.birth_date|date:'Y-m-d' %}{{ form.data.birth_date|date:'Y-m-d' }}{% else %}{{ user.birth_date|date:'Y-m-d' }}{% endif %}" >
+                                    </div>
+                                    <div class="form-group mb-3">
                                         <label for="email" class="control-label">Email</label>
                                         <input type="email" class="form-control rounded-0" name="email" id="email" value="{% if form.data.email %}{{ form.data.email }}{% else %}{{ user.email }}{% endif %}" required="required">
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="email" class="control-label">Contact</label>
-                                        <input type="Contact" class="form-control rounded-0" name="Contact" id="Contact" value="{% if form.data.contact %}{{ form.data.contact }}{% else %}{{ user.contact }}{% endif %}" required="required">
+                                        <label for="contact" class="control-label">Contact</label>
+                                        <input type="text" class="form-control rounded-0" name="contact" id="first_name" value="{% if form.data.contact %}{{ form.data.contact }}{% else %}{{ user.contact }}{% endif %}" >
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="email" class="control-label">Address</label>
-                                        <input type="Address" class="form-control rounded-0" name="Address" id="Address" value="{% if form.data.address %}{{ form.data.address }}{% else %}{{ user.address }}{% endif %}" required="required">
+                                        <label for="address" class="control-label">Address</label>
+                                        <textarea class="form-control rounded-0" name="address" id="address">{% if form.data.address %}{{ form.data.address }}{% else %}{{ user.address }}{% endif %}</textarea>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="current_password" class="control-label">Enter Password</label>
-                                        <input type="password" class="form-control rounded-0" name="current_password" id="current_password" required="required">
-                                    </div>
-                                    {% for field in form %} {% for error in field.errors %}
-                                    <div class="alert alert-danger my-2">
-                                        <p>{{ error }}</p>
-                                    </div>
-                                    {% endfor %} {% endfor %}
+                                    
                                     <div class="form-group mb-3">
                                         <div class="d-flex w-100 justify-content-end">
                                             <button class="btn btn-sm rounded-0 btn-primary col-4">
-                                                    Up date
+                                                    Update
                                                 </button>
                                         </div>
                                     </div>
