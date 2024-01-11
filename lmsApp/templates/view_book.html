@@ -19,7 +19,7 @@
     <div class="">
         <dl>
             <dt>ID book</dt>
-            <dd class="ps-4">{{book.isbn}}</dd>
+            <dd class="ps-4">{{book.id}}</dd>
             <dt>Title</dt>
             <dd class="ps-4">{{book.title}}</dd>
             <dt>Category</dt>
@@ -31,7 +31,7 @@
             <dt>Publisher</dt>
             <dd class="ps-4">{{book.publisher}}</dd>
             <dt>Date Published</dt>
-            <dd class="ps-4">{{book.date_published|date:"F d, Y h:i A"}}</dd>
+            <dd class="ps-4">{{book.date_published}}</dd>
             <dt>Status</dt>
             <dd class="ps-4">
                 {% if book.status == '1' %}

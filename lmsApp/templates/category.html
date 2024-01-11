@@ -16,18 +16,20 @@
         <div class="card rounded-0 shadow">
             <div class="card-body">
                 <div class="container-fluid">
+                    {% if request.user.is_superuser %}
                     <div class="text-end mb-3">
                         <button class="btn btn-sm btn-primary rounded-0 bg-gradient-primary" type="button" id="create_new"><i class="fa fa-plus"></i> Add New</button>
                     </div>
+                    {% endif %}
                     <table class="table table-bordered table-striped" id="category-tbl">
-                        <colcategory>
+                        <colgroup>
                             <col width="5%">
                             <col width="15%">
                             <col width="20%">
                             <col width="30%">
                             <col width="15%">
                             <col width="15%">
-                        </colcategory>
+                        </colgroup>
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
@@ -42,8 +44,8 @@
                             {% for cat in category %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
-                                <td>{{ cat.date_created|date:"Y-m-d H:i" }}</td>
-                                <td>{{ cat.name}}</td>
+                                <td class="text-center">{{ cat.date_added|date:"d-m-Y" }}</td>
+                                <td class="text-center">{{ cat.name}}</td>
                                 <td>
                                     <p class="m-0 truncate-1">{{ cat.description|safe }}</p>
                                 </td>
@@ -52,6 +54,14 @@
                                     <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}
                                     <span class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span> {% endif %}
                                 </td>
+                                {% if not request.user.is_superuser %}
+                                <td class="text-center">
+                                    <a class="btn btn-skyblue btn-sm rounded border view-data" href="javascript:void(0)" data-url="{% url 'view-category-pk' cat.pk %}">
+                                        <i class="fa fa-eye text-dark"></i> View
+                                    </a>         
+                                </td>
+                                {% endif %}
+                                {% if request.user.is_superuser %}
                                 <td class="text-center">
                                     <div class="dropdown">
                                         <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{cat.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,6 +74,7 @@
                                         </ul>
                                     </div>
                                 </td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>
