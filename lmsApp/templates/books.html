@@ -42,7 +42,7 @@
                 
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="myTable">
                             {% for book in books %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
@@ -100,6 +100,7 @@
     });
     });
     $(function() {
+        
         $('#create_new').click(function() {
             uni_modal("<i class='fa fa-plus'></i> Add New Book", "{% url 'manage-book' %}", "modal-lg")
         })
@@ -119,6 +120,7 @@
         })
         $('#book-tbl').find('td, th').addClass('px-2 py-1 align-middle')
         $('#book-tbl').DataTable({
+            bFilter: false, bInfo: false,
             columnDefs: [{
                 orderable: false,
                 targets: [4]
