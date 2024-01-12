@@ -1,0 +1,40 @@
+{% load static %} {% load humanize %}
+<style>
+    #uni_modal .modal-footer {
+        display: none
+    }
+    
+    #uni_modal .modal-sub-footer {
+        display: flex
+    }
+</style>
+<div class="container-fluid" id="e-details">
+    <div class="">
+        <dl>
+            <dt>ID</dt>
+            <dd class="ps-4">{{user.id}}</dd>
+            <dt>Full Name</dt>
+            <dd class="ps-4">{{ user.first_name}} {{ user.middle_name}} {{ user.last_name}}</dd>
+            <dt>Username</dt>
+            <dd class="ps-4">{{user.username}}</dd>
+            <dt>Birthday</dt>
+            <dd class="ps-4">{{user.birth_date}}</dd>
+            <dt>Gender</dt>
+            <dd class="ps-4">{{user.gender}}</dd>
+            <dt>Contact</dt>
+            <dd class="ps-4">{{user.contact}}</dd>
+            <dt>Email</dt>
+            <dd class="ps-4">{{user.email}}</dd>
+            <dt>Address</dt>
+            <dd class="ps-4">{{user.address}}</dd>
+            <dt>Date joined</dt>
+            <dd class="ps-4">{{user.date_joined}}</dd>
+            <dt>Status</dt>
+            <dd class="ps-4">
+                {% if user.is_active == 1 %}
+                <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}
+                <span class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span> {% endif %}
+            </dd>
+        </dl>
+    </div>
+</div>

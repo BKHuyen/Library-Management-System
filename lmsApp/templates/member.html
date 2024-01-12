@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% load static %} {% block pageContent %}
 <section class="py-4">
     <div class="container">
-        <h3 class="fw-bolder text-center">List of Users</h3>
+        <h3 class="fw-bolder text-center">List of Member</h3>
         <center>
-            <hr class="bg-primary opacity-100" style="height:5px" width="50%">
+            <hr class="bg-primary opacity-100" style="height:3px" width="5%">
         </center>
         <div class="card rounded-0 shadow">
             <div class="card-body">
@@ -11,55 +11,54 @@
                     <div class="text-end mb-3">
                         <button class="btn btn-sm btn-primary rounded-0 bg-gradient-primary" type="button" id="create_new"><i class="fa fa-plus"></i> Add New</button>
                     </div>
-                    <table class="table table-bordered table-striped" id="user-tbl">
+                    <table class="table table-bordered table-striped" id="member-tbl">
                         <colgroup>
                             <col width="3%">
                             <col width="20%">
-                            <col width="15%">  
-                            <col width="5%">                          
                             <col width="10%">
-                            <col width="25%">
+                            <col width="15%">
+                            <col width="15%">
                             <col width="15%">
                             <col width="10%">
                             <col width="10%">
                         </colgroup>
                         <thead>
                             <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Full Name</th>
-                                <th class="text-center">Username</th>
-                                <th class="text-center">Gender</th>
-                                <th class="text-center">Birthday</th>
-                                <th class="text-center">Email</th>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Date Added</th>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Name</th>
+                                
                                 <th class="text-center">Contact</th>
+                                <th class="text-center">Email</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in users %}
+                            {% for custom in members %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
-                                <td>{{ user.first_name}} {{ user.middle_name}} {{ user.last_name}}</td>
-                                <td class="text-center">{{ user.username}}</td>
-                                <td class="text-center">{{ user.gender}}</td>
-                                <td class="text-center">{{ user.birth_date|date:"d-m-Y"}}</td>
-                                <td class="text-center">{{ user.email}}</td>
-                                <td class="text-center">{{ user.contact}}</td>
+                                <td>{{ member.date_added|date:"Y-m-d h:i"}}</td>
+                                <td>{{ member.id}}</td>
+                                <td>{{ member.name }}</td>
+                                
+                                <td>{{ member.contact}}</td>
+                                <td>{{ member.email }}</td>
                                 <td class="text-center">
-                                    {% if user.is_active == 1 %}
+                                    {% if member.status == '1' %}
                                     <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}
                                     <span class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span> {% endif %}
                                 </td>
                                 <td class="text-center">
                                     <div class="dropdown">
-                                        <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{user.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{member.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
                                           Action
                                         </button>
-                                        <ul class="dropdown-menu" aria-labelledby="abtn{{user.pk}}">
-                                            <li><a class="dropdown-item view-data" href="javascript:void(0)" data-url="{% url 'view-user-pk' user.pk %}"><i class="fa fa-eye text-dark"></i> View</a></li>
-                                            <li><a class="dropdown-item edit-data" href="javascript:void(0)" data-url="{% url 'manage-user-pk' user.pk %}"><i class="fa fa-edit text-primary"></i> Edit</a></li>
-                                            <li><a class="dropdown-item delete-data" href="javascript:void(0)"  data-url="{% url 'delete-user' user.pk %}"><i class="fa fa-trash text-danger"></i> Delete</a></li>
+                                        <ul class="dropdown-menu" aria-labelledby="abtn{{member.pk}}">
+                                            <li><a class="dropdown-item view-data" href="javascript:void(0)" data-url="{% url 'view-member-pk' member.pk %}"><i class="fa fa-eye text-dark"></i> View</a></li>
+                                            <li><a class="dropdown-item edit-data" href="javascript:void(0)" data-url="{% url 'manage-member-pk' member.pk %}"><i class="fa fa-edit text-primary"></i> Edit</a></li>
+                                            <li><a class="dropdown-item delete-data" href="javascript:void(0)" data-url="{% url 'delete-member' member.pk %}"><i class="fa fa-trash text-danger"></i> Delete</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -76,13 +75,13 @@
 <script>
     $(function() {
         $('#create_new').click(function() {
-            uni_modal("<i class='fa fa-plus'></i> Add New User", "{% url 'manage-user' %}")
+            uni_modal("<i class='fa fa-plus'></i> Add New Member", "{% url 'manage-member' %}","modal-lg")
         })
         $('.edit-data').click(function() {
-            uni_modal("<i class='fa fa-edit'></i> Edit User Details", $(this).attr('data-url'))
+            uni_modal("<i class='fa fa-edit'></i> Edit Member Details", $(this).attr('data-url'),"modal-lg")
         })
         $('.view-data').click(function() {
-            uni_modal("<i class='fa fa-th-list'></i> User Details", $(this).attr('data-url'))
+            uni_modal("<i class='fa fa-th-list'></i> Member Details", $(this).attr('data-url'))
         })
         $('.view_image').click(function() {
             var img = $(this).attr('data-img-url')
@@ -90,14 +89,13 @@
             $('#viewer_modal').modal('show')
         })
         $('.delete-data').click(function() {
-            _conf("Are you sure to delete this Member?", 'delete_user', ["'" + $(this).attr('data-url') + "'"])
+            _conf("Are you sure to delete this member?", 'member', ["'" + $(this).attr('data-url') + "'"])
         })
-        $('#user-tbl').find('td, th').addClass('px-2 py-1 align-middle')
-        $('#user-tbl').DataTable({
-            bFilter: false, bInfo: false,
+        $('#member-tbl').find('td, th').addClass('px-2 py-1 align-middle')
+        $('#member-tbl').DataTable({
             columnDefs: [{
                 orderable: false,
-                targets: [3]
+                targets: [4]
             }],
             lengthMenu: [
                 [25, 50, 100, -1],
@@ -106,7 +104,7 @@
         })
     })
 
-    function delete_user(url) {
+    function delete_member(url) {
 
         var _this = $('#confirm_modal .modal-body')
         $('.err-msg').remove();

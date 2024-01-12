@@ -11,22 +11,14 @@
     <form action="" id="book-form">
         <input type="hidden" name="id" value="{{book.id}}">
         <div class="mb-3">
-            <label for="isbn" class="control-label">ISBN</label>
-            <input type="text" id="isbn" name="isbn" class="form-control form-control-sm rounded-0" value="{{book.isbn}}" required>
-        </div>
-        <div class="mb-3">
-            <label for="sub_category" class="control-label">Category</label>
-            <select type="text" id="sub_category" name="sub_category" class="form-select form-select-sm rounded-0" required>
-                {% if not book.category %}
-                    <option  disabled selected></option>
+            <label for="category" class="control-label">Category</label>
+            <select type="text" id="category" name="category" class="form-select form-select-sm rounded-0" required>
+                
+                {% for category in categories %}
+                {% if  book.category.id == category.id %}
+                    <option value="{{category.id}}" selected>{{category}}</option>
                 {% else %}
-                    <option disabled>Male</option>
-                {% endif %}
-                {% for sub_category in sub_categories %}
-                {% if  book.sub_category.id == sub_category.id %}
-                    <option value="{{sub_category.id}}" selected>{{sub_category.category}} - {{sub_category.name}}</option>
-                {% else %}
-                    <option value="{{sub_category.id}}">{{sub_category.category}} - {{sub_category.name}}</option>
+                    <option value="{{category.id}}">{{category}}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -37,20 +29,26 @@
         </div>
         <div class="mb-3">
             <label for="description" class="control-label">Description</label>
-            <textarea rows="3" id="description" name="description" class="form-control form-control-sm rounded-0" required>{{book.description}}</textarea>
+            <textarea rows="3" id="description" name="description" class="form-control form-control-sm rounded-0" >{{book.description}}</textarea>
         </div>
         <div class="mb-3">
-            <label for="author" class="control-label">Author/s</label>
+            <label for="author" class="control-label">Author</label>
             <textarea rows="3" id="author" name="author" class="form-control form-control-sm rounded-0" required>{{book.author}}</textarea>
         </div>
         <div class="mb-3">
             <label for="publisher" class="control-label">Publisher</label>
-            <input type="text" id="publisher" name="publisher" class="form-control form-control-sm rounded-0" value="{{book.publisher}}" required>
+            <input type="text" id="publisher" name="publisher" class="form-control form-control-sm rounded-0" value="{{book.publisher}}" required>   
         </div>
+        
         <div class="mb-3">
             <label for="date_published" class="control-label">Date Published</label>
-            <input type="date" id="date_published" name="date_published" class="form-control form-control-sm rounded-0" value="{{book.date_published|date:'Y-m-d'}}" required>
+            <input type="text" id="date_published" name="date_published" class="form-control form-control-sm rounded-0" value="{{book.date_published}}" required>
         </div>
+        <div class="mb-3">
+            <label for="quantity" class="control-label">Quantity</label>
+            <input type="number" min="1" id="quantity" name="quantity" class="form-control form-control-sm rounded-0" value="{{book.quantity}}" required>
+        </div>
+        
         <div class="mb-3">
             <label for="status" class="control-label">Status</label>
             <select type="text" id="status" name="status" class="form-select form-select-sm rounded-0" required>
@@ -71,7 +69,7 @@
 <script>
     $(function() {
         $('#uni_modal').on('shown.bs.modal', function() {
-            $('#sub_category').select2({
+            $('#category').select2({
                 width: "100%",
                 placeholder: "Please Select Category Here",
                 dropdownParent: $('#uni_modal'),

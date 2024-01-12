@@ -5,9 +5,22 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from lmsApp import models, forms
-from django.db.models import Q
+from django.db.models import Q, Count, Sum
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from .models import Post  # New
+from django.http import JsonResponse
+from django.views import View
+
+def product_search(request):
+    return render(request, 'index.html')
+
+class ProductAutocomplete(View):
+    def get(self, request):
+        query = request.GET.get('term', '')
+        books = models.Books.objects.filter(name__icontains=query)[:10]
+        results = [book.title for book in books]
+        return JsonResponse(results, safe=False)
 
 def context_data(request):
     fullpath = request.get_full_path()
@@ -56,11 +69,12 @@ def save_register(request):
 def update_profile(request):
     context = context_data(request)
     context['page_title'] = 'Update Profile'
-    user = User.objects.get(id = request.user.id)
+    user = models.CustomUser.objects.get(id = request.user.id)
+    print(request.method)
     if not request.method == 'POST':
         form = forms.UpdateProfile(instance=user)
         context['form'] = form
-        print(form)
+        
     else:
         form = forms.UpdateProfile(request.POST, instance=user)
         if form.is_valid():
@@ -71,11 +85,24 @@ def update_profile(request):
             context['form'] = form
             
     return render(request, 'manage_profile.html',context)
-
+"""
+@login_required
+def update_profile(request, pk = None):
+    context = context_data(request)
+    context['page'] = 'manage_user'
+    context['page_title'] = 'Manage User'
+    if pk is None:
+        context['user'] = {}
+    else:
+        context['user'] = models.CustomUser.objects.get(id=pk)
+    
+    return render(request, 'manage_profile.html', context)
+"""
 @login_required
 def update_password(request):
     context =context_data(request)
     context['page_title'] = "Update Password"
+    user = models.CustomUser.objects.get(id = request.user.id)
     if request.method == 'POST':
         form = forms.UpdatePasswords(user = request.user, data= request.POST)
         if form.is_valid():
@@ -93,7 +120,7 @@ def update_password(request):
 # Create your views here.
 def login_page(request):
     context = context_data(request)
-    context['topbar'] = False
+    context['topbar'] = True
     context['footer'] = False
     context['page_name'] = 'login'
     context['page_title'] = 'Login'
@@ -125,9 +152,9 @@ def home(request):
     context['page'] = 'home'
     context['page_title'] = 'Home'
     context['categories'] = models.Category.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['students'] = models.Students.objects.filter(delete_flag = 0, status = 1).all().count()
-    context['books'] = models.Students.objects.filter(delete_flag = 0, status = 1).all().count()
+    #context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
+    #context['member'] = models.Member.objects.filter(delete_flag = 0, status = 1).all().count()
+    context['books'] = models.Books.objects.filter(delete_flag = 0, status = 1).all().count()
     context['pending'] = models.Borrow.objects.filter(status = 1).all().count()
     context['pending'] = models.Borrow.objects.filter(status = 1).all().count()
     context['transactions'] = models.Borrow.objects.all().count()
@@ -150,7 +177,7 @@ def users(request):
     context = context_data(request)
     context['page'] = 'users'
     context['page_title'] = "User List"
-    context['users'] = User.objects.exclude(pk=request.user.pk).filter(is_superuser = False).all()
+    context['users'] = models.CustomUser.objects.exclude(pk=request.user.pk).filter(is_superuser = False).all()
     return render(request, 'users.html', context)
 
 @login_required
@@ -159,7 +186,7 @@ def save_user(request):
     if request.method == 'POST':
         post = request.POST
         if not post['id'] == '':
-            user = User.objects.get(id = post['id'])
+            user = models.CustomUser.objects.get(id = post['id'])
             form = forms.UpdateUser(request.POST, instance=user)
         else:
             form = forms.SaveUser(request.POST) 
@@ -173,14 +200,27 @@ def save_user(request):
             resp['status'] = 'success'
         else:
             for field in form:
-                for error in field.errors:
-                    if not resp['msg'] == '':
-                        resp['msg'] += str('<br/>')
-                    resp['msg'] += str(f'[{field.name}] {error}')
+                if field.field.required and not field.value():
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
     else:
          resp['msg'] = "There's no data sent on the request"
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
+
+@login_required
+def view_user(request, pk = None):
+    context = context_data(request)
+    context['page'] = 'view_user'
+    context['page_title'] = 'View User'
+    if pk is None:
+        context['user'] = {}
+    else:
+        context['user'] = models.CustomUser.objects.get(id=pk)
+    
+    return render(request, 'view_user.html', context)
 
 @login_required
 def manage_user(request, pk = None):
@@ -190,7 +230,7 @@ def manage_user(request, pk = None):
     if pk is None:
         context['user'] = {}
     else:
-        context['user'] = User.objects.get(id=pk)
+        context['user'] = models.CustomUser.objects.get(id=pk)
     
     return render(request, 'manage_user.html', context)
 
@@ -201,7 +241,7 @@ def delete_user(request, pk = None):
         resp['msg'] = 'User ID is invalid'
     else:
         try:
-            User.objects.filter(pk = pk).delete()
+            models.CustomUser.objects.filter(pk = pk).delete()
             messages.success(request, "User has been deleted successfully.")
             resp['status'] = 'success'
         except:
@@ -286,82 +326,6 @@ def delete_category(request, pk = None):
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 @login_required
-def sub_category(request):
-    context = context_data(request)
-    context['page'] = 'sub_category'
-    context['page_title'] = "Sub Category List"
-    context['sub_category'] = models.SubCategory.objects.filter(delete_flag = 0).all()
-    return render(request, 'sub_category.html', context)
-
-@login_required
-def save_sub_category(request):
-    resp = { 'status': 'failed', 'msg' : '' }
-    if request.method == 'POST':
-        post = request.POST
-        if not post['id'] == '':
-            sub_category = models.SubCategory.objects.get(id = post['id'])
-            form = forms.SaveSubCategory(request.POST, instance=sub_category)
-        else:
-            form = forms.SaveSubCategory(request.POST) 
-
-        if form.is_valid():
-            form.save()
-            if post['id'] == '':
-                messages.success(request, "Sub Category has been saved successfully.")
-            else:
-                messages.success(request, "Sub Category has been updated successfully.")
-            resp['status'] = 'success'
-        else:
-            for field in form:
-                for error in field.errors:
-                    if not resp['msg'] == '':
-                        resp['msg'] += str('<br/>')
-                    resp['msg'] += str(f'[{field.name}] {error}')
-    else:
-         resp['msg'] = "There's no data sent on the request"
-
-    return HttpResponse(json.dumps(resp), content_type="application/json")
-
-@login_required
-def view_sub_category(request, pk = None):
-    context = context_data(request)
-    context['page'] = 'view_sub_category'
-    context['page_title'] = 'View Sub Category'
-    if pk is None:
-        context['sub_category'] = {}
-    else:
-        context['sub_category'] = models.SubCategory.objects.get(id=pk)
-    
-    return render(request, 'view_sub_category.html', context)
-
-@login_required
-def manage_sub_category(request, pk = None):
-    context = context_data(request)
-    context['page'] = 'manage_sub_category'
-    context['page_title'] = 'Manage Sub Category'
-    if pk is None:
-        context['sub_category'] = {}
-    else:
-        context['sub_category'] = models.SubCategory.objects.get(id=pk)
-    context['categories'] = models.Category.objects.filter(delete_flag = 0, status = 1).all()
-    return render(request, 'manage_sub_category.html', context)
-
-@login_required
-def delete_sub_category(request, pk = None):
-    resp = { 'status' : 'failed', 'msg':''}
-    if pk is None:
-        resp['msg'] = 'Sub Category ID is invalid'
-    else:
-        try:
-            models.SubCategory.objects.filter(pk = pk).update(delete_flag = 1)
-            messages.success(request, "Sub Category has been deleted successfully.")
-            resp['status'] = 'success'
-        except:
-            resp['msg'] = "Deleting Sub Category Failed"
-
-    return HttpResponse(json.dumps(resp), content_type="application/json")
-
-@login_required
 def books(request):
     context = context_data(request)
     context['page'] = 'book'
@@ -374,10 +338,14 @@ def save_book(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
+        print(post)
+        print(post['id'])
         if not post['id'] == '':
+            print(1)
             book = models.Books.objects.get(id = post['id'])
-            form = forms.SaveBook(request.POST, instance=book)
+            form = forms.SaveBook(request.POST,instance = book)
         else:
+            print(2)
             form = forms.SaveBook(request.POST) 
 
         if form.is_valid():
@@ -419,7 +387,7 @@ def manage_book(request, pk = None):
         context['book'] = {}
     else:
         context['book'] = models.Books.objects.get(id=pk)
-    context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all()
+    context['categories'] = models.Category.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_book.html', context)
 
 @login_required
@@ -438,113 +406,71 @@ def delete_book(request, pk = None):
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 @login_required
-def students(request):
-    context = context_data(request)
-    context['page'] = 'student'
-    context['page_title'] = "Student List"
-    context['students'] = models.Students.objects.filter(delete_flag = 0).all()
-    return render(request, 'students.html', context)
-
-@login_required
-def save_student(request):
-    resp = { 'status': 'failed', 'msg' : '' }
-    if request.method == 'POST':
-        post = request.POST
-        if not post['id'] == '':
-            student = models.Students.objects.get(id = post['id'])
-            form = forms.SaveStudent(request.POST, instance=student)
-        else:
-            form = forms.SaveStudent(request.POST) 
-
-        if form.is_valid():
-            form.save()
-            if post['id'] == '':
-                messages.success(request, "Student has been saved successfully.")
-            else:
-                messages.success(request, "Student has been updated successfully.")
-            resp['status'] = 'success'
-        else:
-            for field in form:
-                for error in field.errors:
-                    if not resp['msg'] == '':
-                        resp['msg'] += str('<br/>')
-                    resp['msg'] += str(f'[{field.name}] {error}')
-    else:
-         resp['msg'] = "There's no data sent on the request"
-
-    return HttpResponse(json.dumps(resp), content_type="application/json")
-
-@login_required
-def view_student(request, pk = None):
-    context = context_data(request)
-    context['page'] = 'view_student'
-    context['page_title'] = 'View Student'
-    if pk is None:
-        context['student'] = {}
-    else:
-        context['student'] = models.Students.objects.get(id=pk)
-    
-    return render(request, 'view_student.html', context)
-
-@login_required
-def manage_student(request, pk = None):
-    context = context_data(request)
-    context['page'] = 'manage_student'
-    context['page_title'] = 'Manage Student'
-    if pk is None:
-        context['student'] = {}
-    else:
-        context['student'] = models.Students.objects.get(id=pk)
-    context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all()
-    return render(request, 'manage_student.html', context)
-
-@login_required
-def delete_student(request, pk = None):
-    resp = { 'status' : 'failed', 'msg':''}
-    if pk is None:
-        resp['msg'] = 'Student ID is invalid'
-    else:
-        try:
-            models.Students.objects.filter(pk = pk).update(delete_flag = 1)
-            messages.success(request, "Student has been deleted successfully.")
-            resp['status'] = 'success'
-        except:
-            resp['msg'] = "Deleting Student Failed"
-
-    return HttpResponse(json.dumps(resp), content_type="application/json")
-
-@login_required
 def borrows(request):
     context = context_data(request)
     context['page'] = 'borrow'
     context['page_title'] = "Borrowing Transaction List"
-    context['borrows'] = models.Borrow.objects.order_by('status').all()
+    
+    context['borrows'] = models.Borrow.objects.order_by('user__username').all()
+    
     return render(request, 'borrows.html', context)
+
+@login_required
+def user_borrows(request):
+    context = context_data(request)
+    context['page'] = 'user_borrow'
+    context['page_title'] = "Borrowing Transaction List"
+    
+    context['user_borrows'] = models.Borrow.objects.filter(user=request.user).all()
+    
+    return render(request, 'user_borrow.html', context)
 
 @login_required
 def save_borrow(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
+        user = request.POST.get('user')
+        print(user)
         if not post['id'] == '':
             borrow = models.Borrow.objects.get(id = post['id'])
             form = forms.SaveBorrow(request.POST, instance=borrow)
+            if form.is_valid():
+                
+                form.save()
+                if post['id'] == '':
+                    messages.success(request, "Borrowing Transaction has been saved successfully.")
+                else:
+                    messages.success(request, "Borrowing Transaction has been updated successfully.")
+                resp['status'] = 'success'
+            else:
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
         else:
             form = forms.SaveBorrow(request.POST) 
-
-        if form.is_valid():
-            form.save()
-            if post['id'] == '':
-                messages.success(request, "Borrowing Transaction has been saved successfully.")
+            if form.is_valid():
+                total_books_borrowed = models.Borrow.objects.filter(user__id=user, status='1').aggregate(total=Sum('quantity'))
+                print(total_books_borrowed)
+                if total_books_borrowed['total'] >=3:
+                    
+                    resp['msg'] = "The user have borrowed the maximum allowed number of books."
+                else:
+                    form.save()
+                    if post['id'] == '':
+                        messages.success(request, "Borrowing Transaction has been saved successfully.")
+                    else:
+                        messages.success(request, "Borrowing Transaction has been updated successfully.")
+                    resp['status'] = 'success'
             else:
-                messages.success(request, "Borrowing Transaction has been updated successfully.")
-            resp['status'] = 'success'
-        else:
-            for field in form:
-                for error in field.errors:
-                    if not resp['msg'] == '':
-                        resp['msg'] += str('<br/>')
-                    resp['msg'] += str(f'[{field.name}] {error}')
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
+            
     else:
          resp['msg'] = "There's no data sent on the request"
 
@@ -571,7 +497,7 @@ def manage_borrow(request, pk = None):
         context['borrow'] = {}
     else:
         context['borrow'] = models.Borrow.objects.get(id=pk)
-    context['students'] = models.Students.objects.filter(delete_flag = 0, status = 1).all()
+    context['users'] = models.CustomUser.objects.filter(is_active = True, is_superuser = 0).all()
     context['books'] = models.Books.objects.filter(delete_flag = 0, status = 1).all()
     return render(request, 'manage_borrow.html', context)
 
