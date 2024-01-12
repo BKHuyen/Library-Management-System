@@ -166,83 +166,14 @@ class SaveBook(forms.ModelForm):
             return category
         except:
             raise forms.ValidationError("Invalid Category.")
-    """
-    def clean_isbn(self):
-        id = int(self.data['id']) if (self.data['id']).isnumeric() else 0
-        isbn = self.cleaned_data['isbn']
-        try:
-            if id > 0:
-                book = models.Books.objects.exclude(id = id).get(isbn = isbn, delete_flag = 0)
-            else:
-                book = models.Books.objects.get(isbn = isbn, delete_flag = 0)
-        except:
-            return isbn
-        raise forms.ValidationError("ISBN already exists on the Database.")"""
-"""  
-class SaveMember(forms.ModelForm):
-    ID = forms.IntegerField()
-    first_name = forms.CharField(max_length=250, help_text="The First name field is required.")
-    middle_name = forms.CharField(max_length=250, required= False)
-    last_name = forms.CharField(max_length=250, help_text="The Last name field is required.")
-    username = forms.CharField(max_length=250,help_text="The Username field is required.")
-    birth_date = forms.DateField()
-    gender = forms.CharField(max_length=250)
-    contact = forms.CharField(max_length=250)
-    email = forms.CharField(max_length=250, help_text="The Email field is required.")
-    address = forms.Textarea()
-    status = forms.CharField(max_length=2)
-    password = forms.CharField(max_length=250, help_text="The Password field is required.")
     
-
-    class Meta:
-        model = models.Member
-        fields = ('first_name', 'middle_name', 'last_name', 'username', 'birth_date', 'gender', 'contact', 'email', 'address', 'status', 'password', )
-
-    def clean_code(self):
-        id = int(self.data['id']) if (self.data['id']).isnumeric() else 0
-        code = self.cleaned_data['id']
+    def clean_title(self):
+        title = self.cleaned_data['title']
         try:
-            if id > 0:
-                book = models.Member.objects.exclude(id = id).get(code = code, delete_flag = 0)
-            else:
-                book = models.Member.objects.get(code = code, delete_flag = 0)
-        except:
-            return code
-        raise forms.ValidationError("Member Id already exists on the Database.")
-
-class UpdateMember(UserChangeForm):
-    first_name = forms.CharField(max_length=250,help_text="The First Name field is required.")
-    middle_name = forms.CharField(max_length=250, required= False)
-    last_name = forms.CharField(max_length=250,help_text="The Last Name field is required.")
-    username = forms.CharField(max_length=250,help_text="The Username field is required.")
-    gender = forms.CharField(max_length=250)
-    contact = forms.CharField(max_length=250)
-    email = forms.EmailField(max_length=250,help_text="The Email field is required.")
-    address = forms.CharField(max_length=250)
-    status = forms.CharField(max_length=2)
-    password = forms.CharField(max_length=250, help_text="The Password field is required.")
-    
-    
-    class Meta:
-        model = models.Member
-        fields = ('first_name', 'middle_name', 'last_name', 'username', 'gender', 'contact', 'email', 'address', 'status', 'password', )
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        try:
-            user = models.Member.objects.exclude(id=self.cleaned_data['id']).get(email = email)
+            book = models.Books.objects.exclude(id=self.cleaned_data['id']).get(title = title)
         except Exception as e:
-            return email
-        raise forms.ValidationError(f"The {user.email} mail is already exists/taken")
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        try:
-            user = models.Member.objects.exclude(id=self.cleaned_data['id']).get(username = username)
-        except Exception as e:
-            return username
-        raise forms.ValidationError(f"The {user.username} mail is already exists/taken")
-"""
+            return title
+        raise forms.ValidationError(f"This username is already exists/taken")
 
 class SaveBorrow(forms.ModelForm):
     user = forms.CharField(max_length=250)

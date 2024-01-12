@@ -85,19 +85,7 @@ def update_profile(request):
             context['form'] = form
             
     return render(request, 'manage_profile.html',context)
-"""
-@login_required
-def update_profile(request, pk = None):
-    context = context_data(request)
-    context['page'] = 'manage_user'
-    context['page_title'] = 'Manage User'
-    if pk is None:
-        context['user'] = {}
-    else:
-        context['user'] = models.CustomUser.objects.get(id=pk)
-    
-    return render(request, 'manage_profile.html', context)
-"""
+
 @login_required
 def update_password(request):
     context =context_data(request)
@@ -152,8 +140,6 @@ def home(request):
     context['page'] = 'home'
     context['page_title'] = 'Home'
     context['categories'] = models.Category.objects.filter(delete_flag = 0, status = 1).all().count()
-    #context['sub_categories'] = models.SubCategory.objects.filter(delete_flag = 0, status = 1).all().count()
-    #context['member'] = models.Member.objects.filter(delete_flag = 0, status = 1).all().count()
     context['books'] = models.Books.objects.filter(delete_flag = 0, status = 1).all().count()
     context['pending'] = models.Borrow.objects.filter(status = 1).all().count()
     context['pending'] = models.Borrow.objects.filter(status = 1).all().count()
@@ -338,14 +324,12 @@ def save_book(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
-        print(post)
-        print(post['id'])
+        
         if not post['id'] == '':
-            print(1)
             book = models.Books.objects.get(id = post['id'])
             form = forms.SaveBook(request.POST,instance = book)
         else:
-            print(2)
+
             form = forms.SaveBook(request.POST) 
 
         if form.is_valid():
