@@ -10,7 +10,7 @@
     {% else %}
     <title>{{system_name}}</title>
     {% endif %}
-    <link rel="shortcut icon" href="{% static 'assets/default/img/logo.jpg' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'assets/default/img/logo.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
@@ -51,7 +51,7 @@
             transition: all .2s ease-in-out;
         }
         body{
-            background-image:url({%static "assets/default/img/wallpaper.jpg"%});
+            background-image:url({%static "assets/default/img/xanh.jpg"%});
             background-size:cover;
             background-repeat:no-repeat;
             background-position:center center;
@@ -157,6 +157,7 @@
     <!--Footer-->
     {% if footer %}
     <footer class="bg-light text-lg-start">
+        
         <!-- <div class="py-4 text-center">
             <a role="button" class="btn btn-primary btn-lg m-2" href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA" rel="nofollow" target="_blank">
         Learn Bootstrap 5
@@ -185,10 +186,15 @@
         </div> -->
 
         <!-- Copyright -->
-        <!-- <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
             © {% now 'Y' %} Copyright:
-            <a class="text-dark" href="https://sourcecodester.com/tips23" target="_blank">oretnom23</a>
-        </div> -->
+            <a class="text-dark" href="https://sourcecodester.com/tips23" target="_blank">HUST</a>
+            <div>
+            <a>Contact: 0378623542<a>
+            <center>
+            </center>
+          <div>  
+        </div>
         <!-- Copyright -->
     </footer>
     {% endif %}
