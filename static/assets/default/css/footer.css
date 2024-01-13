@@ -46,6 +46,13 @@
   display:flex;
 
  }
+ a {
+  color: #051e44;
+  text-decoration: underline;
+}
+a:hover {
+  color: #051e44;
+}
  /*home*/
  .grid_colum-2-4{
   padding-left: 3px;
@@ -67,5 +74,6 @@ border-top: 4px solid var(--primary-color);}
 .cation{
   color:rgb(1, 13, 77);
 }
+
 
 /*home*/

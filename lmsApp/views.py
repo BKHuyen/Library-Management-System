@@ -70,7 +70,7 @@ def update_profile(request):
     context = context_data(request)
     context['page_title'] = 'Update Profile'
     user = models.CustomUser.objects.get(id = request.user.id)
-    print(request.method)
+    
     if not request.method == 'POST':
         form = forms.UpdateProfile(instance=user)
         context['form'] = form
@@ -108,7 +108,7 @@ def update_password(request):
 # Create your views here.
 def login_page(request):
     context = context_data(request)
-    context['topbar'] = True
+    context['topbar'] = False
     context['footer'] = False
     context['page_name'] = 'login'
     context['page_title'] = 'Login'
@@ -171,22 +171,34 @@ def save_user(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
+        username = request.POST.get('username')
         if not post['id'] == '':
             user = models.CustomUser.objects.get(id = post['id'])
-            form = forms.UpdateUser(request.POST, instance=user)
-        else:
-            form = forms.SaveUser(request.POST) 
-
-        if form.is_valid():
-            form.save()
-            if post['id'] == '':
-                messages.success(request, "User has been saved successfully.")
-            else:
+            form = forms.UpdateUser(request.POST,instance = user)
+            if form.is_valid():
+                form.save()
+                
                 messages.success(request, "User has been updated successfully.")
-            resp['status'] = 'success'
-        else:
-            for field in form:
-                if field.field.required and not field.value():
+                resp['status'] = 'success'
+            else:
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
+        else: 
+            form = forms.SaveUser(request.POST) 
+            if form.is_valid():
+                existing_book = models.CustomUser.objects.filter(username=username).first()
+                
+                if existing_book: 
+                    resp['msg'] = "This username is already exist."
+                else:
+                    form.save()
+                    messages.success(request, "User has been saved successfully.")
+                    resp['status'] = 'success'
+            else:
+                for field in form:
                     for error in field.errors:
                         if not resp['msg'] == '':
                             resp['msg'] += str('<br/>')
@@ -248,25 +260,38 @@ def save_category(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
+        name = request.POST.get('name')
         if not post['id'] == '':
             category = models.Category.objects.get(id = post['id'])
-            form = forms.SaveCategory(request.POST, instance=category)
-        else:
-            form = forms.SaveCategory(request.POST) 
-
-        if form.is_valid():
-            form.save()
-            if post['id'] == '':
-                messages.success(request, "Category has been saved successfully.")
-            else:
+            form = forms.SaveCategory(request.POST,instance = category)
+            if form.is_valid():
+                form.save()
+                
                 messages.success(request, "Category has been updated successfully.")
-            resp['status'] = 'success'
-        else:
-            for field in form:
-                for error in field.errors:
-                    if not resp['msg'] == '':
-                        resp['msg'] += str('<br/>')
-                    resp['msg'] += str(f'[{field.name}] {error}')
+                resp['status'] = 'success'
+            else:
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
+        else: 
+            form = forms.SaveCategory(request.POST) 
+            if form.is_valid():
+                existing_book = models.Category.objects.filter(name=name).first()
+                
+                if existing_book: 
+                    resp['msg'] = "This category is already exist."
+                else:
+                    form.save()
+                    messages.success(request, "Category has been saved successfully.")
+                    resp['status'] = 'success'
+            else:
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
     else:
          resp['msg'] = "There's no data sent on the request"
 
@@ -324,27 +349,38 @@ def save_book(request):
     resp = { 'status': 'failed', 'msg' : '' }
     if request.method == 'POST':
         post = request.POST
-        
+        title = request.POST.get('title')
         if not post['id'] == '':
             book = models.Books.objects.get(id = post['id'])
             form = forms.SaveBook(request.POST,instance = book)
-        else:
-
-            form = forms.SaveBook(request.POST) 
-
-        if form.is_valid():
-            form.save()
-            if post['id'] == '':
-                messages.success(request, "Book has been saved successfully.")
-            else:
+            if form.is_valid():
+                form.save()
+                
                 messages.success(request, "Book has been updated successfully.")
-            resp['status'] = 'success'
-        else:
-            for field in form:
-                for error in field.errors:
-                    if not resp['msg'] == '':
-                        resp['msg'] += str('<br/>')
-                    resp['msg'] += str(f'[{field.name}] {error}')
+                resp['status'] = 'success'
+            else:
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
+        else: 
+            form = forms.SaveBook(request.POST) 
+            if form.is_valid():
+                existing_book = models.Books.objects.filter(title=title).first()
+                print(existing_book)
+                if existing_book: 
+                    resp['msg'] = "This book is already exist."
+                else:
+                    form.save()
+                    messages.success(request, "Book has been saved successfully.")
+                    resp['status'] = 'success'
+            else:
+                for field in form:
+                    for error in field.errors:
+                        if not resp['msg'] == '':
+                            resp['msg'] += str('<br/>')
+                        resp['msg'] += str(f'[{field.name}] {error}')
     else:
          resp['msg'] = "There's no data sent on the request"
 
@@ -415,17 +451,15 @@ def save_borrow(request):
     if request.method == 'POST':
         post = request.POST
         user = request.POST.get('user')
-        print(user)
+        quantity = request.POST.get('quantity')
         if not post['id'] == '':
             borrow = models.Borrow.objects.get(id = post['id'])
             form = forms.SaveBorrow(request.POST, instance=borrow)
             if form.is_valid():
                 
                 form.save()
-                if post['id'] == '':
-                    messages.success(request, "Borrowing Transaction has been saved successfully.")
-                else:
-                    messages.success(request, "Borrowing Transaction has been updated successfully.")
+                
+                messages.success(request, "Borrowing Transaction has been updated successfully.")
                 resp['status'] = 'success'
             else:
                 for field in form:
@@ -437,16 +471,17 @@ def save_borrow(request):
             form = forms.SaveBorrow(request.POST) 
             if form.is_valid():
                 total_books_borrowed = models.Borrow.objects.filter(user__id=user, status='1').aggregate(total=Sum('quantity'))
-                print(total_books_borrowed)
-                if total_books_borrowed['total'] >=3:
+                if total_books_borrowed['total'] is None:
+                    total_books_borrowed['total'] = 0
+                print(quantity)
+                if (int(total_books_borrowed['total']) + int(quantity)) >=3:
                     
                     resp['msg'] = "The user have borrowed the maximum allowed number of books."
                 else:
                     form.save()
-                    if post['id'] == '':
-                        messages.success(request, "Borrowing Transaction has been saved successfully.")
-                    else:
-                        messages.success(request, "Borrowing Transaction has been updated successfully.")
+                    
+                    messages.success(request, "Borrowing Transaction has been saved successfully.")
+                    
                     resp['status'] = 'success'
             else:
                 for field in form:

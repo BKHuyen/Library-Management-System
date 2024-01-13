@@ -19,7 +19,7 @@
                             <col width="5%">                          
                             <col width="10%">
                             <col width="25%">
-                            <col width="15%">
+                            
                             <col width="10%">
                             <col width="10%">
                         </colgroup>
@@ -31,7 +31,7 @@
                                 <th class="text-center">Gender</th>
                                 <th class="text-center">Birthday</th>
                                 <th class="text-center">Email</th>
-                                <th class="text-center">Contact</th>
+                                
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -45,7 +45,7 @@
                                 <td class="text-center">{{ user.gender}}</td>
                                 <td class="text-center">{{ user.birth_date|date:"d-m-Y"}}</td>
                                 <td class="text-center">{{ user.email}}</td>
-                                <td class="text-center">{{ user.contact}}</td>
+                                
                                 <td class="text-center">
                                     {% if user.is_active == 1 %}
                                     <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}

@@ -173,7 +173,7 @@ class SaveBook(forms.ModelForm):
             book = models.Books.objects.exclude(id=self.cleaned_data['id']).get(title = title)
         except Exception as e:
             return title
-        raise forms.ValidationError(f"This username is already exists/taken")
+        raise forms.ValidationError(f"This book is already exists/taken")
 
 class SaveBorrow(forms.ModelForm):
     user = forms.CharField(max_length=250)
