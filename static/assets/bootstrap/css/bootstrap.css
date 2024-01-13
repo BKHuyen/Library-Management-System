@@ -4012,8 +4012,8 @@ textarea.form-control-lg {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: .2rem;
+  padding-bottom: .2rem;
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -4035,6 +4035,16 @@ textarea.form-control-lg {
   text-decoration: none;
   white-space: nowrap;
 }
+
+.navbar-brandlogo {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  margin-right: 0rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 .navbar-nav {
   display: flex;
   flex-direction: column;
@@ -4051,8 +4061,8 @@ textarea.form-control-lg {
 }
 
 .navbar-text {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
 }
 
 .navbar-collapse {

@@ -8,7 +8,7 @@ from lmsApp import models, forms
 from django.db.models import Q, Count, Sum
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from .models import Post  # New
+
 from django.http import JsonResponse
 from django.views import View
 

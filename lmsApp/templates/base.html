@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{% static 'assets/DataTables/datatables.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/select2/dist/css/select2.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/default/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/default/css/footer.css' %}">
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js" integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{% static 'assets/default/js/jquery-3.6.0.min.js' %}"></script>
@@ -51,10 +53,14 @@
             transition: all .2s ease-in-out;
         }
         body{
-            background-image:url({%static "assets/default/img/xanh.jpg"%});
+            background-image:url({%static "assets/default/img/pastel.png"%});
             background-size:cover;
             background-repeat:no-repeat;
             background-position:center center;
+        }
+        .footer_logo_qr{
+            width:90px;
+            height:90px;
         }
     </style>
     {% block headerContent %} {% endblock headerContent %}
@@ -186,14 +192,46 @@
         </div> -->
 
         <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            © {% now 'Y' %} Copyright:
-            <a class="text-dark" href="https://sourcecodester.com/tips23" target="_blank">HUST</a>
-            <div>
-            <a>Contact: 0378623542<a>
-            <center>
-            </center>
-          <div>  
+        <div class="grid">
+            <div class="grid_row">
+                <div class="grid_colum-2-1">
+                    <div class="footer_logo">
+                        <img src="{% static 'assets/default/img/logo.png' %}" alt="" class="footer_logo_qr"></div>
+                </div>
+                <div class="grid_colum-2-2">
+                    <h6>LIRBRARY SYSTEM <br>
+                        Contact: 0999.999.999<br>
+                        Email: lirbrarysystem@gmail.com<br>
+                        Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội<br>
+                    </h6>
+                </div>
+                <div class="grid_colum-2-3">
+                    <h6>Hỗ trợ<br>
+                        <a href="" class="footer-item_link">
+                            <i class="fa-brands fa-facebook"></i>
+                            Facebook</a><br>
+                        <a href="" class="footer-item_link">
+                            <i class="fa-brands fa-instagram"></i>
+                             Instagram</a><br>
+                         <a href="" class="footer-item_link">
+                            <i class="fa-brands fa-linkedin"></i>
+                                Linkend</a><br>
+                    </h6>
+
+                </div>
+
+                <div class="grid_colum-2-3">
+                    <h6>Tác giả<br>
+                        <a href="https://www.facebook.com/profile.php?id=100053589071924" class="footer-item_link">
+                            Phạm Thị Hà</a><br>
+                        <a href="https://www.facebook.com/huyn0209" class="footer-item_link">
+                            Bùi Khánh Huyền</a><br>
+                         <a href="https://www.facebook.com/profile.php?id=100006722616918" class="footer-item_link">
+                            Phạm Đức Duy</a><br>
+                    </h6>
+
+                </div>
+            </div>
         </div>
         <!-- Copyright -->
     </footer>
